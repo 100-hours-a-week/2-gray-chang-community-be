@@ -45,7 +45,7 @@ public class CommentService {
     }
 
     private Posts getPost(Long postId) {
-        Posts post = postRepository.findbyIdFetch(postId)
+        Posts post = postRepository.findById(postId)
                 .orElseThrow(()->{
                     logger.warn("게시글 없음 : {}", postId);
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다.");
@@ -68,7 +68,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<CommentDto> getAllComments(Long postId) {
         Posts post = getPost(postId);
-        List<Comment> comments = commentRepository.findAllByPosts(post);
+        List<Comment> comments = commentRepository.findAllByPostsFetch(post);
         List<CommentDto> commentDtos = comments.stream()
                 .map(CommentDto::new)
                 .toList();
